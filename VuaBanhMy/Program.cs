@@ -62,7 +62,7 @@ namespace VuaBanhMy
                 var adminEmail = "admin@gmail.com";
                 if (await userManager.FindByEmailAsync(adminEmail) is null)
                 {
-                    var admin = new ApplicationUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+                    var admin = new ApplicationUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true, FullName = "Quản trị viên"};
                     var result = await userManager.CreateAsync(admin, "12345678");
                     if (result.Succeeded)
                         await userManager.AddToRoleAsync(admin, "Admin");

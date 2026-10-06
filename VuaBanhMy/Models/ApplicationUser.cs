@@ -7,7 +7,8 @@ namespace VuaBanhMy.Models
     {
         [MaxLength(100)]
         public string FullName { get; set; } = string.Empty;
-        public string Address { get; set; }
+        [MaxLength(255)]
+        public string? Address { get; set; }
         // Bạn tự viết: thuộc tính Address
         //  - cho phép null (khách có thể chưa nhập địa chỉ)
         //  - tối đa 255 ký tự
