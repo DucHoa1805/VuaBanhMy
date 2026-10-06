@@ -59,13 +59,24 @@ namespace VuaBanhMy
                     if (!await roleManager.RoleExistsAsync(role))
                         await roleManager.CreateAsync(new IdentityRole(role));
 
-                var adminEmail = "admin@gmail.com";
+                var adminEmail = "admin@banhmyking.vn";
                 if (await userManager.FindByEmailAsync(adminEmail) is null)
                 {
-                    var admin = new ApplicationUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true, FullName = "Quản trị viên"};
-                    var result = await userManager.CreateAsync(admin, "12345678");
-                    if (result.Succeeded)
-                        await userManager.AddToRoleAsync(admin, "Admin");
+                    var admin = new ApplicationUser
+                    {
+                        UserName = adminEmail,
+                        Email = adminEmail,
+                        EmailConfirmed = true,
+                        FullName = "Quản trị viên"
+                    };
+
+                    var result = await userManager.CreateAsync(admin, "Admin@123");
+                    if (!result.Succeeded)
+                        throw new InvalidOperationException(
+                            "Không tạo được tài khoản admin: " +
+                            string.Join("; ", result.Errors.Select(e => e.Description)));
+
+                    await userManager.AddToRoleAsync(admin, "Admin");
                 }
             }
 
