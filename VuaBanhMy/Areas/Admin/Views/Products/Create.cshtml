@@ -1,0 +1,16 @@
+@model ProductFormViewModel
+@{
+    ViewData["Title"] = "Thêm món";
+}
+
+<h1>Thêm món</h1>
+
+<form asp-action="Create" method="post" class="col-md-6">
+    <partial name="_ProductForm" model="Model" />
+    <button type="submit" class="btn btn-primary">Thêm</button>
+    <a asp-action="Index" class="btn btn-link">Quay lại</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

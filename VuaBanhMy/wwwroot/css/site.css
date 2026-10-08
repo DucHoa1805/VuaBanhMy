@@ -34,3 +34,10 @@ body {
   height: 180px;
   object-fit: cover;
 }
+
+/* Ảnh nhỏ trong bảng quản lý món */
+.admin-thumb {
+  width: 64px;
+  height: 48px;
+  object-fit: cover;
+}

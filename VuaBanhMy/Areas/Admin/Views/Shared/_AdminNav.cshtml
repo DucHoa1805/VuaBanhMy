@@ -1,0 +1,11 @@
+@{
+    var current = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link @(current == "Categories" ? "active" : "")" asp-area="Admin" asp-controller="Categories" asp-action="Index">Danh mục</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(current == "Products" ? "active" : "")" asp-area="Admin" asp-controller="Products" asp-action="Index">Món ăn</a>
+    </li>
+</ul>

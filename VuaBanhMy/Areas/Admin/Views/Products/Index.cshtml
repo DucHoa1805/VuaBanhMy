@@ -1,0 +1,65 @@
+@model List<Product>
+@using System.Globalization
+@{
+    ViewData["Title"] = "Quản lý món ăn";
+    var vnCulture = CultureInfo.GetCultureInfo("vi-VN");
+}
+
+<partial name="_AdminNav" />
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Quản lý món ăn</h1>
+    <a asp-action="Create" class="btn btn-primary">+ Thêm món</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">Chưa có món nào.</div>
+}
+else
+{
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th style="width: 80px">Ảnh</th>
+                <th>Tên món</th>
+                <th>Danh mục</th>
+                <th class="text-end">Giá</th>
+                <th>Trạng thái</th>
+                <th class="text-end">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr class="@(product.IsAvailable ? "" : "table-secondary")">
+                    <td>
+                        <img src="@(product.ImageUrl ?? "/images/no-image.svg")" alt="@product.Name"
+                             class="rounded admin-thumb" />
+                    </td>
+                    <td>@product.Name</td>
+                    <td>@product.Category?.Name</td>
+                    <td class="text-end">@product.Price.ToString("N0", vnCulture) đ</td>
+                    <td>
+                        @if (product.IsAvailable)
+                        {
+                            <span class="badge bg-success">Đang bán</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Đã ẩn</span>
+                        }
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-outline-secondary">Sửa</a>
+                        <form asp-action="ToggleAvailability" asp-route-id="@product.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm @(product.IsAvailable ? "btn-outline-warning" : "btn-outline-success")">
+                                @(product.IsAvailable ? "Ẩn" : "Hiện")
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

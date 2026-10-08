@@ -31,11 +31,73 @@ namespace VuaBanhMy.Services
                 })
                 .ToListAsync();
 
-        // Phần Admin — cài ở Task 1.6
-        public Task<List<Product>> GetAllAsync() => throw new NotImplementedException();
-        public Task<Product?> GetByIdAsync(int id) => throw new NotImplementedException();
-        public Task<ServiceResult> CreateAsync(Product product) => throw new NotImplementedException();
-        public Task<ServiceResult> UpdateAsync(Product product) => throw new NotImplementedException();
-        public Task<ServiceResult> ToggleAvailabilityAsync(int id) => throw new NotImplementedException();
+        // ===== Phần Admin =====
+
+        public Task<List<Product>> GetAllAsync() =>
+            db.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .OrderBy(p => p.Category!.Name)
+                .ThenBy(p => p.Name)
+                .ToListAsync();
+
+        public Task<Product?> GetByIdAsync(int id) =>
+            db.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+        public async Task<ServiceResult> CreateAsync(Product product)
+        {
+            var error = await ValidateAsync(product);
+            if (error != null)
+                return ServiceResult.Fail(error);
+
+            product.Name = product.Name.Trim();
+            product.IsAvailable = true; // món mới luôn đang bán
+            db.Products.Add(product);
+            await db.SaveChangesAsync();
+            return ServiceResult.Ok();
+        }
+
+        public async Task<ServiceResult> UpdateAsync(Product product)
+        {
+            var existing = await db.Products.FindAsync(product.Id);
+            if (existing == null)
+                return ServiceResult.Fail("Không tìm thấy món.");
+
+            var error = await ValidateAsync(product);
+            if (error != null)
+                return ServiceResult.Fail(error);
+
+            // Chỉ chép các field được phép sửa — IsAvailable giữ nguyên
+            existing.Name = product.Name.Trim();
+            existing.Description = product.Description;
+            existing.Price = product.Price;
+            existing.CategoryId = product.CategoryId;
+            existing.ImageUrl = product.ImageUrl;
+            await db.SaveChangesAsync();
+            return ServiceResult.Ok();
+        }
+
+        public async Task<ServiceResult> ToggleAvailabilityAsync(int id)
+        {
+            var product = await db.Products.FindAsync(id);
+            if (product == null)
+                return ServiceResult.Fail("Không tìm thấy món.");
+
+            product.IsAvailable = !product.IsAvailable;
+            await db.SaveChangesAsync();
+            return ServiceResult.Ok();
+        }
+
+        // Trả về thông báo lỗi, hoặc null nếu hợp lệ
+        private async Task<string?> ValidateAsync(Product product)
+        {
+            if (string.IsNullOrWhiteSpace(product.Name))
+                return "Vui lòng nhập tên món.";
+            if (product.Price <= 0)
+                return "Giá phải lớn hơn 0.";
+            if (!await db.Categories.AnyAsync(c => c.Id == product.CategoryId))
+                return "Danh mục không tồn tại.";
+            return null;
+        }
     }
 }

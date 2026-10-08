@@ -1,0 +1,18 @@
+@model ProductFormViewModel
+@{
+    ViewData["Title"] = "Sửa món";
+}
+
+<h1>Sửa món</h1>
+
+<form asp-action="Edit" method="post" class="col-md-6">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ExistingImageUrl" />
+    <partial name="_ProductForm" model="Model" />
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="Index" class="btn btn-link">Quay lại</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
