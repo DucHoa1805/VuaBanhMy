@@ -46,6 +46,11 @@ namespace VuaBanhMy
             app.UseAuthorization();
 
             app.MapStaticAssets();
+            // Route cho Area (vd: /Admin/Categories) — phải đứng TRƯỚC route default
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
+                .WithStaticAssets();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
