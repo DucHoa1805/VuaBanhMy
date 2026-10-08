@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#f1f3f5"/>
+  <g fill="none" stroke="#adb5bd" stroke-width="8" stroke-linejoin="round">
+    <rect x="140" y="100" width="120" height="90" rx="8"/>
+    <polyline points="140,175 180,140 210,165 230,150 260,175"/>
+  </g>
+  <circle cx="230" cy="125" r="10" fill="#adb5bd"/>
+  <text x="200" y="230" font-family="Arial, sans-serif" font-size="20" fill="#868e96" text-anchor="middle">Chưa có ảnh</text>
+</svg>

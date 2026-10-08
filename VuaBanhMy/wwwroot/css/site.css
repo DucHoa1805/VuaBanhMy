@@ -29,3 +29,8 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+/* Ảnh món trên trang Thực đơn: cùng chiều cao, cắt vừa khung */
+.menu-card-img {
+  height: 180px;
+  object-fit: cover;
+}
