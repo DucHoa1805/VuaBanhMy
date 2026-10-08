@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using VuaBanhMy.Data;
 using VuaBanhMy.Models;
+using VuaBanhMy.Services;
 namespace VuaBanhMy
 {
     public class Program
@@ -21,6 +22,8 @@ namespace VuaBanhMy
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             var app = builder.Build();
 
