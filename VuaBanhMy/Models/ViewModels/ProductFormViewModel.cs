@@ -26,8 +26,10 @@ namespace VuaBanhMy.Models.ViewModels
         [Display(Name = "Danh mục")]
         public int? CategoryId { get; set; }
 
-        public string? ExistingImageUrl { get; set; }   // dùng ở Task 1.7
-        public IFormFile? ImageFile { get; set; }        // dùng ở Task 1.7
+        public string? ExistingImageUrl { get; set; }   // ảnh hiện tại (khi Sửa)
+
+        [Display(Name = "Ảnh món")]
+        public IFormFile? ImageFile { get; set; }        // ảnh mới upload (không bắt buộc)
 
         public List<SelectListItem> Categories { get; set; } = new();
     }

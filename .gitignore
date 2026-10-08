@@ -480,3 +480,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Ảnh món do Admin upload (dữ liệu, không phải mã nguồn)
+VuaBanhMy/wwwroot/images/products/

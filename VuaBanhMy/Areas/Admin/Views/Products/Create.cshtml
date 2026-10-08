@@ -5,7 +5,7 @@
 
 <h1>Thêm món</h1>
 
-<form asp-action="Create" method="post" class="col-md-6">
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="col-md-6">
     <partial name="_ProductForm" model="Model" />
     <button type="submit" class="btn btn-primary">Thêm</button>
     <a asp-action="Index" class="btn btn-link">Quay lại</a>

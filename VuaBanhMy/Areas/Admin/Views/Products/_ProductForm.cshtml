@@ -24,3 +24,16 @@
     <textarea asp-for="Description" class="form-control" rows="3"></textarea>
     <span asp-validation-for="Description" class="text-danger"></span>
 </div>
+<div class="mb-3">
+    <label asp-for="ImageFile" class="form-label"></label>
+    @if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
+    {
+        <div class="mb-2">
+            <img src="@Model.ExistingImageUrl" alt="Ảnh hiện tại" class="rounded border" style="max-height: 150px" />
+            <div class="form-text">Ảnh hiện tại — chọn file mới nếu muốn thay.</div>
+        </div>
+    }
+    <input asp-for="ImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+    <div class="form-text">JPG, PNG hoặc WEBP, tối đa 2 MB.</div>
+    <span asp-validation-for="ImageFile" class="text-danger"></span>
+</div>

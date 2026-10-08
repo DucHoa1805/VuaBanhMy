@@ -25,6 +25,7 @@ namespace VuaBanhMy
 
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IImageService, ImageService>();
 
             var app = builder.Build();
 

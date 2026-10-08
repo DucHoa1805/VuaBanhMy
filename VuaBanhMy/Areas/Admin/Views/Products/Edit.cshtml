@@ -5,7 +5,7 @@
 
 <h1>Sửa món</h1>
 
-<form asp-action="Edit" method="post" class="col-md-6">
+<form asp-action="Edit" method="post" enctype="multipart/form-data" class="col-md-6">
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="ExistingImageUrl" />
     <partial name="_ProductForm" model="Model" />

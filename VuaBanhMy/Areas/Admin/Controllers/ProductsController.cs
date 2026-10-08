@@ -9,7 +9,10 @@ namespace VuaBanhMy.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class ProductsController(IProductService productService, ICategoryService categoryService) : Controller
+    public class ProductsController(
+        IProductService productService,
+        ICategoryService categoryService,
+        IImageService imageService) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -28,6 +31,7 @@ namespace VuaBanhMy.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductFormViewModel vm)
         {
+            var imageUrl = await SaveUploadedImageAsync(vm);
             if (!ModelState.IsValid)
             {
                 await LoadCategoriesAsync(vm);
@@ -39,7 +43,8 @@ namespace VuaBanhMy.Areas.Admin.Controllers
                 Name = vm.Name,
                 Description = vm.Description,
                 Price = vm.Price,
-                CategoryId = vm.CategoryId!.Value
+                CategoryId = vm.CategoryId!.Value,
+                ImageUrl = imageUrl
             });
             if (!result.Success)
             {
@@ -78,6 +83,7 @@ namespace VuaBanhMy.Areas.Admin.Controllers
             if (id != vm.Id)
                 return BadRequest();
 
+            var newImageUrl = await SaveUploadedImageAsync(vm);
             if (!ModelState.IsValid)
             {
                 await LoadCategoriesAsync(vm);
@@ -91,7 +97,7 @@ namespace VuaBanhMy.Areas.Admin.Controllers
                 Description = vm.Description,
                 Price = vm.Price,
                 CategoryId = vm.CategoryId!.Value,
-                ImageUrl = vm.ExistingImageUrl // giữ ảnh cũ (upload ảnh mới làm ở Task 1.7)
+                ImageUrl = newImageUrl ?? vm.ExistingImageUrl // không chọn ảnh mới → giữ ảnh cũ
             });
             if (!result.Success)
             {
@@ -115,6 +121,23 @@ namespace VuaBanhMy.Areas.Admin.Controllers
                 TempData["Error"] = result.ErrorMessage;
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // Lưu ảnh nếu Admin có chọn file. Trả về đường dẫn ảnh mới, hoặc null nếu
+        // không chọn ảnh / form đang có lỗi / ảnh không hợp lệ (lỗi được thêm vào ModelState)
+        private async Task<string?> SaveUploadedImageAsync(ProductFormViewModel vm)
+        {
+            if (vm.ImageFile == null || !ModelState.IsValid)
+                return null;
+
+            var result = await imageService.SaveProductImageAsync(vm.ImageFile);
+            if (!result.Success)
+            {
+                ModelState.AddModelError(nameof(vm.ImageFile), result.ErrorMessage!);
+                return null;
+            }
+
+            return result.Data;
         }
 
         // Đổ dữ liệu dropdown danh mục — gọi ở GET và cả khi POST lỗi
